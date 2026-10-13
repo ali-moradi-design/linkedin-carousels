@@ -15,7 +15,7 @@ const args = process.argv.slice(2);
 const htmlOnly = args.includes('--html-only');
 const targets = args.filter((a) => !a.startsWith('--'));
 
-const ATOM = `<svg viewBox="-11.5 -10.23 23 20.46" xmlns="http://www.w3.org/2000/svg"><circle r="2.05" fill="#61dafb"/><g stroke="#61dafb" stroke-width="1" fill="none"><ellipse rx="11" ry="4.2"/><ellipse rx="11" ry="4.2" transform="rotate(60)"/><ellipse rx="11" ry="4.2" transform="rotate(120)"/></g></svg>`;
+const ATOM = `<svg viewBox="-11.5 -10.23 23 20.46" xmlns="http://www.w3.org/2000/svg"><circle r="2.05" fill="currentColor"/><g stroke="currentColor" stroke-width="1" fill="none"><ellipse rx="11" ry="4.2"/><ellipse rx="11" ry="4.2" transform="rotate(60)"/><ellipse rx="11" ry="4.2" transform="rotate(120)"/></g></svg>`;
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
@@ -29,7 +29,12 @@ function inline(text) {
     .replace(/\n/g, '<br>');
 }
 
-async function codeBlock({ src, lang = 'jsx', file, size }) {
+// Kicker text is uppercased, but hook names (useState, useReducer, ...) keep their casing.
+function kicker(text) {
+  return text.split(/(\buse[A-Z]\w*)/).map((part, i) => (i % 2 ? part : part.toUpperCase())).join('');
+}
+
+async function codeBlock({ src, lang = 'tsx', file, size }) {
   const html = await codeToHtml(src.replace(/^\n|\n\s*$/g, ''), { lang, theme: 'one-dark-pro' });
   const style = size ? ` style="--code-size:${size}px"` : '';
   return `<div class="code-card"${style}><div class="bar"><i></i><i></i><i></i>${file ? `<span>${esc(file)}</span>` : ''}</div>${html}</div>`;
@@ -72,9 +77,9 @@ async function renderSlide(s, i, total, meta) {
       <p class="lead">${inline(s.subtitle)}</p></div>`;
   } else {
     const body = (await Promise.all((s.blocks || []).map(block))).join('');
-    inner = `<div class="content">${s.kicker ? `<div class="kicker">${inline(s.kicker)}</div>` : ''}${s.title ? `<h2>${inline(s.title)}</h2>` : ''}${body}</div>`;
+    inner = `<div class="content">${s.kicker ? `<div class="kicker">${inline(kicker(s.kicker))}</div>` : ''}${s.title ? `<h2>${inline(s.title)}</h2>` : ''}${body}</div>`;
   }
-  return `<section class="slide ${s.type || ''}">${top}${inner}${bottom}</section>`;
+  return `<section class="slide ${s.type || ''}" data-theme="${config.theme}">${top}${inner}${bottom}</section>`;
 }
 
 function page(sections, cssHref) {

@@ -25,7 +25,8 @@ The build warns when content overflows a slide.
 Slide blocks: `lead`, `text`, `code`, `list`, `defs`, `note`, `rule`, `table`, `cols`, `steps`, `html`.
 Inline markup: `` `code` ``, `**bold**`, `==cyan==`, `~~violet~~`, `\n` line break.
 
-Your name/handle and slide size live in `config.mjs`; colors and layout in `template/styles.css`.
+Your name/handle, theme and slide size live in `config.mjs`. Theme colors are CSS variables in `template/styles.css` (`.slide[data-theme="green"]`) — change ~6 hex values to try a new palette.
+Code samples are TypeScript (`lang: 'ts'` / default `tsx`). Kickers are uppercased automatically, except hook names like `useState`.
 
 ## Series
 

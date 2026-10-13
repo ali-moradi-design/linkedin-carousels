@@ -31,24 +31,25 @@ export const slides = [
     kicker: 'useState · Syntax',
     title: 'One line to add state',
     blocks: [
-      { code: { lang: 'js', size: 30, src: `const [state, setState] = useState(initialState);` } },
+      { code: { lang: 'ts', size: 25, src: `
+const [state, setState] = useState<Type>(initialState);` } },
       { defs: [
         ['state', 'The current value for this render.'],
         ['setState', 'Updates the value **and** triggers a re-render.'],
         ['initialState', 'The value on the **first render** only. Ignored after that.'],
+        ['<Type>', 'Optional — usually **inferred**. Add it when it can\'t be:\n`useState<User | null>(null)`'],
       ] },
-      { note: 'Call hooks only at the **top level** of your component — not inside loops or conditions.' },
     ],
   },
   {
     kicker: 'useState · Example',
     title: 'A simple counter',
     blocks: [
-      { code: { file: 'Counter.jsx', size: 30, src: `
+      { code: { file: 'Counter.tsx', size: 29, src: `
 import { useState } from 'react';
 
 function Counter() {
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(0); // number
 
   return (
     <button onClick={() => setCount(count + 1)}>
@@ -64,13 +65,13 @@ function Counter() {
     title: 'Use it the right way',
     blocks: [
       { steps: [
-        { title: 'New value depends on the old one? Pass a function', code: { lang: 'js', size: 27, src: `setCount(c => c + 1); // ✅ uses the latest value` } },
-        { title: 'Objects & arrays: replace, don\'t mutate', code: { lang: 'js', size: 27, src: `
+        { title: 'New value depends on the old one? Pass a function', code: { lang: 'ts', size: 27, src: `setCount(c => c + 1); // ✅ uses the latest value` } },
+        { title: 'Objects & arrays: replace, don\'t mutate', code: { lang: 'ts', size: 27, src: `
 setUser({ ...user, name: 'Sara' }); // ✅ new object
 user.name = 'Sara';                 // ❌ no re-render` } },
-        { title: 'Expensive initial value? Pass the function itself', code: { lang: 'js', size: 27, src: `
-useState(createTodos);   // ✅ runs once
-useState(createTodos()); // ❌ runs every render` } },
+        { title: 'Expensive initial value? Pass the function itself', code: { lang: 'ts', size: 27, src: `
+useState<Todo[]>(createTodos);   // ✅ runs once
+useState<Todo[]>(createTodos()); // ❌ every render` } },
       ] },
     ],
   },
@@ -78,26 +79,32 @@ useState(createTodos()); // ❌ runs every render` } },
     kicker: 'useReducer · Syntax',
     title: 'All update logic in one place',
     blocks: [
-      { code: { lang: 'js', size: 27, src: `
+      { code: { lang: 'ts', size: 27, src: `
 const [state, dispatch] = useReducer(
-  reducer,
-  initialArg,
-  init? // optional
+  reducer, initialArg, init?
 );` } },
       { defs: [
         ['reducer', 'A pure function:\n`(state, action) => newState`'],
         ['initialArg', 'The starting state.'],
-        ['init?', 'Optional. A function that builds the initial state from `initialArg`.'],
-        ['dispatch', 'Call it with an **action** to update state and re-render.'],
+        ['init?', 'Optional. Builds the initial state from `initialArg`.'],
+        ['dispatch', 'Send an **action** → React updates state and re-renders.'],
       ] },
+      { note: 'TypeScript **infers** the types from your reducer.' },
     ],
   },
   {
     kicker: 'useReducer · Step 1',
     title: 'Write the reducer',
     blocks: [
-      { code: { file: 'reducer.js', lang: 'js', size: 28, src: `
-function reducer(state, action) {
+      { code: { file: 'reducer.ts', lang: 'ts', size: 24, src: `
+type State = { count: number };
+
+type Action =
+  | { type: 'incremented' }
+  | { type: 'decremented' }
+  | { type: 'reset' };
+
+function reducer(state: State, action: Action): State {
   switch (action.type) {
     case 'incremented':
       return { count: state.count + 1 };
@@ -105,18 +112,16 @@ function reducer(state, action) {
       return { count: state.count - 1 };
     case 'reset':
       return { count: 0 };
-    default:
-      throw Error('Unknown action: ' + action.type);
   }
 }` } },
-      { note: 'An **action** describes *what happened*. The **reducer** decides *how state changes*.' },
+      { note: 'An **action** describes ==what happened==. The **reducer** decides ==how state changes==.' },
     ],
   },
   {
     kicker: 'useReducer · Step 2',
     title: 'Use it in the component',
     blocks: [
-      { code: { file: 'Counter.jsx', size: 26, src: `
+      { code: { file: 'Counter.tsx', size: 26, src: `
 function Counter() {
   const [state, dispatch] =
     useReducer(reducer, { count: 0 });
@@ -132,7 +137,7 @@ function Counter() {
     </>
   );
 }` } },
-      { text: 'Event handlers only say ==what happened==. No update logic inside them.' },
+      { note: 'Typo like `{ type: \'incremnted\' }`? TypeScript shows an **error** before you even run it.' },
     ],
   },
   {
@@ -144,7 +149,7 @@ function Counter() {
         '**Never mutate** state. Always return a new object or array.',
         'In Strict Mode, React calls it **twice** in development to catch mistakes.',
       ] },
-      { code: { lang: 'js', size: 27, src: `
+      { code: { lang: 'ts', size: 27, src: `
 // ❌ mutation
 state.count++;
 return state;
@@ -157,7 +162,7 @@ return { ...state, count: state.count + 1 };` } },
     kicker: 'Common gotcha (both hooks)',
     title: 'State is a snapshot',
     blocks: [
-      { code: { lang: 'js', size: 28, src: `
+      { code: { lang: 'ts', size: 28, src: `
 function handleClick() {
   setCount(count + 1); // or dispatch(...)
   console.log(count);  // 😮 still the OLD value
