@@ -1,0 +1,1 @@
+{"excludes": ["posts/**/out/**", "out/**", "**/out/**"], "gitignore": true}

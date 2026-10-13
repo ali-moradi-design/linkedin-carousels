@@ -1,0 +1,38 @@
+{
+  "config.mjs": {
+    "mtime": 1791921647.6040738,
+    "seen": 1791922613.2539291,
+    "ast_hash": "aec5a70a2dd7526f086e8faae30dd1e9",
+    "semantic_hash": "aec5a70a2dd7526f086e8faae30dd1e9"
+  },
+  "package.json": {
+    "mtime": 1791920703.2137322,
+    "seen": 1791922613.2539365,
+    "ast_hash": "4ee9c519d8401bba6293ac37940dc4ea",
+    "semantic_hash": "4ee9c519d8401bba6293ac37940dc4ea"
+  },
+  "posts/react-hooks/01-usestate-vs-usereducer/slides.mjs": {
+    "mtime": 1791921726.5346038,
+    "seen": 1791922613.25394,
+    "ast_hash": "a9ddc4d3c1cdfb5dc985721cb2edfcf4",
+    "semantic_hash": "a9ddc4d3c1cdfb5dc985721cb2edfcf4"
+  },
+  "scripts/build.mjs": {
+    "mtime": 1791921647.6034284,
+    "seen": 1791922613.253942,
+    "ast_hash": "3b76396ff6708ac6a7ba33cee067168b",
+    "semantic_hash": "3b76396ff6708ac6a7ba33cee067168b"
+  },
+  "README.md": {
+    "mtime": 1791921740.4194722,
+    "seen": 1791922613.2539434,
+    "ast_hash": "c60ce6de439b1bbe857916d8f42f5d3f",
+    "semantic_hash": "c60ce6de439b1bbe857916d8f42f5d3f"
+  },
+  "posts/react-hooks/01-usestate-vs-usereducer/caption.md": {
+    "mtime": 1791920877.67578,
+    "seen": 1791922613.253945,
+    "ast_hash": "bc1811e3ca969612726ad223d22406d8",
+    "semantic_hash": "bc1811e3ca969612726ad223d22406d8"
+  }
+}
